@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="BIG5">
+	<title>Reservation Detail</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+</head>
+<body>
+
+<div class="container text-center">
+	<div class="p-2"><h1>Reservation Detail</h1></div>  
+	
+	<div class="p-2"><h3>Basic Information</h3></div> 
+	
+	<div class="p-2">
+		<a>Invoice Number: [[${reservation.invoice}]]</a>
+		<p></p>
+		<a>Date: [[${reservation.date}]]</a>
+	</div>		
+
+	<div class="p-2"><h3>Member List</h3></div> 
+		<div>
+			<table class="table table-bordered">
+				<thead class="thead-dark">
+					<tr>
+						<th>Customer</th>
+						<th>Phone #</th>
+						<th>E-mail</th>
+						<th>Land</th>
+						<th>Flight</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<th:block th:each="customer : ${existingCustomers}">
+					<tr>
+						<td>[[${customer.first_name} + ${" "} + ${customer.last_name} + ${" ("} + ${customer.gender} + ${")"}]]</td>
+						<td>[[${customer.phones}]]</td>
+						<td>[[${customer.emails}]]</td>
+						<td>
+							
+							<a th:href="@{'/lands/new'}">Add</a>
+							<!-- 
+							&nbsp; 
+							<a th:href="@{'/lands/edit/' + ${land.id}}">Edit</a>
+							&nbsp;
+							<a th:href="@{'/lands/delete/' + ${land.id}}">Delete</a>
+							-->
+						</td>
+	                    <td>
+	                   		<a th:href="@{'/flights/add/' + ${reservation.id} + '/' + ${customer.id}}">Add</a>
+	                   		<!-- 
+	                   		<a th:href="@{'/flights/edit/' + ${flight.id}}">Edit</a>
+							&nbsp;
+							<a th:href="@{'/flights/delete/' + ${flight.id}}">Delete</a>
+							-->
+	                    </td>
+	                    <td>
+							<a th:href="@{'/customers/info/' + ${customer.id}}">Info</a>
+						</td>
+					</tr>
+					</th:block>
+				</tbody>
+			</table>
+		</div>
+	</div> 
+</body>
+</html>

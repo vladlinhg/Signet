@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="BIG5">
+	<title>Customer Detail</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+</head>
+<body>
+
+<div class="container text-center">
+	<div class="p-2"><h1>Customer Detail</h1></div>  
+	
+	<div class="p-2"><h3>Basic Information</h3></div> 
+	
+	<div class="p-2">
+		<a>First Name: [[${customer.first_name}]]</a>
+		<p></p>
+		<a>Last Name: [[${customer.last_name}]]</a>
+		<p></p>
+		<a>Gender: [[${customer.gender}]]</a>
+		<p></p>
+		<a>Date of Birth: [[${customer.birth_date}]]</a>
+	</div>	
+	
+	<div class="p-2"><h3>Contact</h3></div> 
+
+	<th:block th:each="phone, status : ${customer.phones}">
+		<div class="form-group row">
+			<label class="col-form-label col-sm-6">Phone #[[${status.count}]]: </label>
+			<div class="col-sm-6">
+				<a>[[${phone.number}]]</a>
+				<a>([[${phone.title}]])</a>
+			</div>
+		</div>
+	</th:block>
+	
+	<th:block th:each="email, status : ${customer.emails}">
+		<div class="form-group row">
+			<label class="col-form-label col-sm-6">Email #[[${status.count}]]: </label>
+			<div class="col-sm-6">
+				<a>[[${email.email}]]</a>
+				<a>([[${email.title}]])</a>
+			</div>
+		</div>
+	</th:block>
+		
+	<th:block th:each="address, status : ${customer.addresses}">
+		<div class="form-group row">
+			<label class="col-form-label col-sm-12">Address #[[${status.count}]]: </label>
+		</div>
+		<div class="form-group row">
+			<label class="col-form-label col-sm-2">Street: </label>
+				<div class="col-sm-2">
+				<a>[[${address.street}]]</a>
+				</div>
+			<label class="col-form-label col-sm-2">Unit/Apt Number: </label>
+				<div class="col-sm-2">
+				<a>[[${address.unit}]]</a>
+				</div>
+			<label class="col-form-label col-sm-2">City: </label>
+				<div class="col-sm-2">
+				<a>[[${address.city}]]</a>
+				</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-form-label col-sm-2">Province/Country: </label>
+				<div class="col-sm-2">
+				<a>[[${address.province}]]</a>
+				</div>
+			<label class="col-form-label col-sm-2">Postal Code: </label>
+				<div class="col-sm-2">
+				<a>[[${address.postal_code}]]</a>
+				</div>
+			<label class="col-form-label col-sm-2">Note: </label>
+				<div class="col-sm-2">
+				<a>[[${address.title}]]</a>
+				</div>
+		</div>
+	</th:block>
+	
+	<div class="p-2"><h3>Membership</h3></div> 
+	
+	<th:block th:each="membership, status : ${customer.memberships}">
+		<div class="form-group row">
+			<label class="col-form-label col-sm-12">Membership #[[${status.count}]]: </label>
+		</div>
+		<div class="form-group row">
+			<label class="col-form-label col-sm-2">User ID/Serial Number: </label>
+				<div class="col-sm-2">
+				<a>[[${membership.user_id}]]</a>
+				</div>
+			<label class="col-form-label col-sm-2">User/Account Name: </label>
+				<div class="col-sm-2">
+				<a>[[${membership.username}]]</a>
+				</div>
+			<label class="col-form-label col-sm-2">User/Account Password: </label>
+				<div class="col-sm-2">
+				<a>[[${membership.password}]]</a>
+				</div>
+		</div>
+		
+		<div class="form-group row">
+			<label class="col-form-label col-sm-2">Company/Group/Service Provider: </label>
+				<div class="col-sm-2">
+				<a>[[${membership.company}]]</a>
+				</div>
+			<label class="col-form-label col-sm-2">Note: </label>
+				<div class="col-sm-2">
+				<a>[[${membership.note}]]</a>
+				</div>
+		</div>
+	</th:block>
+		
+	<div class="p-2"><h3>Reservations</h3></div> 
+		<div>
+			<table class="table table-bordered">
+				<thead class="thead-dark">
+					<tr>
+						<th>Invoice Number</th>
+						<th>Date</th>
+						<th>Member</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<th:block th:each="reservation : ${existingReservations}">
+					<tr>
+						<td>[[${reservation.invoice}]]</td>
+						<td>[[${reservation.date}]]</td>
+						<td>[[${reservation.customers}]]</td>
+						
+						<td>
+							<a th:href="@{'/reservations/info/' + ${reservation.id}}">Info</a>
+						</td>
+					</tr>
+					</th:block>
+				</tbody>
+			</table>
+		</div>
+		
+	<div class="p-2"><h3>Flights</h3></div> 
+		<div>
+			<table class="table table-bordered">
+				<thead class="thead-dark">
+					<tr>
+						<th>Flight Number</th>
+						<th>Airline</th>
+						<th>Departure Time</th>
+						<th>Arrival Time</th>
+						<th>Starting City</th>
+						<th>Destination</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<th:block th:each="flight : ${existingFlights}">
+					<tr>
+						<td>[[${flight.flight_number}]]</td>
+						<td>[[${flight.airline}]]</td>
+						<td>[[${flight.time_departure}]]</td>
+						<td>[[${flight.time_arrival}]]</td>
+						<td>[[${flight.airport_departure}]]</td>
+						<td>[[${flight.airport_arrival}]]</td>
+						
+						<td>
+							<a th:href="@{'/flights/edit/' + ${flight.id}}">Edit</a>
+						</td>
+					</tr>
+					</th:block>
+				</tbody>
+			</table>
+		</div>
+		
+	</div> 
+</body>
+</html>

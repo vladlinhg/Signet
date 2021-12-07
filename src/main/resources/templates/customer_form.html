@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="BIG5">
+	<title>Customer</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+</head>
+<body>
+
+<div class="container text-center">
+	<div th:if="${customer.id == null}"><h1>Create New Customer</h1></div>
+	<div th:unless="${customer.id == null}"><h1>Edit Customer</h1></div>
+	
+	<div><h2 style="font-size:24px">Basic Information</h2></div>
+	
+	<form th:action="@{/customers/save}" th:object="${customer}" method="post" style="max-width: 1000px; margin: 0 auto;">
+	<input type="hidden" th:field="*{id}" th:value="${customer.id}" />
+	<div class ="m-3">
+		<div class="form-group row">
+			<label class="col-form-label col-sm-4">First Name: </label>
+			<div class="col-sm-8">
+				<input type="text" th:field="*{first_name}" class="form-control" required />
+			</div>
+		</div>
+		
+		<div class="form-group row">
+			<label class="col-form-label col-sm-4">Last Name: </label>
+			<div class="col-sm-8">
+				<input type="text" th:field="*{last_name}" class="form-control" >
+			</div>
+		</div>
+		
+		<div class="form-group row">
+			<label class="col-form-label col-sm-4">Gender: </label>
+			<div class="col-sm-8">
+				<select th:field="*{gender}" class="form-control" >
+					<option th:value="M">Male</option>
+					<option th:value="F">Female</option>
+				</select>
+			</div>
+		</div>
+		
+		<div class="form-group row">
+			<label class="col-form-label col-sm-4">Date of Birth: </label>
+			<div class="col-sm-8">
+				<input type="date" th:field="*{birth_date}" class="form-control" >
+			</div>
+		</div>
+		
+		<th:block th:unless="${customer.id == null}">
+		<div><h2 style="font-size:24px">Contact</h2></div>
+		</th:block>
+		
+		<th:block th:unless="${customer.id == null}" th:each="phone, status : ${customer.phones}">
+		<input type="hidden" name="phoneID" th:value="${phone.id}" />
+		<div class="form-group row">
+			<label class="col-form-label col-sm-3">Phone #[[${status.count}]]: </label>
+			<div class="col-sm-6">
+				<input type="tel" name="phoneNumber" placeholder = "Enter phone number as format: 000-000-0000" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" th:value="${phone.number}" class="form-control" >
+			</div>
+			<div class="col-sm-2">
+				<input type="text" name="phoneTitle" placeholder = "Note" th:value="${phone.title}" class="form-control" >
+			</div>
+			<div class="col-sm-1">
+				<a th:href="@{'/customers/edit/' + ${customer.id} + '/delete_phone/' + ${phone.id}}" class="btn btn-danger" role="button">Delete</a>
+			</div>
+		</div>
+		</th:block>
+		
+		<th:block th:unless="${customer.id == null}">
+		<div class="col-sm-12">
+			<a th:href="@{'/customers/edit/' + ${customer.id} + '/add_phone'}" class="btn btn-info" role="button">Add New Phone</a>
+			<p></p>
+		</div>
+		</th:block>
+		
+		<th:block th:unless="${customer.id == null}" th:each="email, status : ${customer.emails}">
+		<input type="hidden" name="emailID" th:value="${email.id}" />
+		<div class="form-group row">
+			<label class="col-form-label col-sm-3">E-mail #[[${status.count}]]: </label>
+			<div class="col-sm-6">
+				<input type="email" name="emailEmail" placeholder = "Email Address" th:value="${email.email}" class="form-control" >
+			</div>
+			<div class="col-sm-2">
+				<input type="text" name="emailTitle" placeholder = "Note" th:value="${email.title}" class="form-control" >
+			</div>
+			<div class="col-sm-1">
+				<a th:href="@{'/customers/edit/' + ${customer.id} + '/delete_email/' + ${email.id}}" class="btn btn-danger" role="button">Delete</a>
+			</div>
+		</div>
+		</th:block>
+		
+		<th:block th:unless="${customer.id == null}">
+		<div class="col-sm-12">
+			<a th:href="@{'/customers/edit/' + ${customer.id} + '/add_email'}" class="btn btn-info" role="button">Add New email</a>
+			<p></p>
+		</div>
+		</th:block>
+		
+		<th:block th:unless="${customer.id == null}" th:each="address, status : ${customer.addresses}">
+		<input type="hidden" name="addressID" th:value="${address.id}" />
+		<div class="form-group row">
+			<label class="col-form-label col-sm-9">Address #[[${status.count}]]: </label>
+			<div class="col-sm-3">
+				<a th:href="@{'/customers/edit/' + ${customer.id} + '/delete_address/' + ${address.id}}" class="btn btn-danger" role="button">Delete</a>
+			</div>
+		</div>
+		
+		<div class="form-group row">
+			<label class="col-form-label col-sm-2">Street: </label>
+			<div class="col-sm-4">
+				<input type="text" name="addressStreet" placeholder = "Street Number" th:value="${address.street}" class="form-control" >
+			</div>
+			<label class="col-form-label col-sm-2">Unit: </label>
+			<div class="col-sm-4">
+				<input type="text" name="addressUnit" placeholder = "Unit/Apt Number" th:value="${address.unit}" class="form-control" >
+			</div>
+		</div>
+		
+		<div class="form-group row">
+			<label class="col-form-label col-sm-2">City: </label>
+			<div class="col-sm-4">
+				<input type="text" name="addressCity" placeholder = "City" th:value="${address.city}" class="form-control" >
+			</div>
+			<label class="col-form-label col-sm-2">Province: </label>
+			<div class="col-sm-4">
+				<input type="text" name="addressProvince" placeholder = "Province/Country" th:value="${address.province}" class="form-control" >
+			</div>
+		</div>
+		
+		<div class="form-group row">
+			<label class="col-form-label col-sm-2">Postal Code: </label>
+			<div class="col-sm-4">
+				<input type="text" name="addressPostal_Code" placeholder = "Postal Code" th:value="${address.postal_code}" class="form-control" >
+			</div>
+			<label class="col-form-label col-sm-2">Note: </label>
+			<div class="col-sm-4">
+				<input type="text" name="addressTitle" placeholder = "Note" th:value="${address.title}" class="form-control" >
+			</div>
+		</div>
+		</th:block>
+		
+		<th:block th:unless="${customer.id == null}">
+		<div class="col-sm-12">
+			<a th:href="@{'/customers/edit/' + ${customer.id} + '/add_address'}" class="btn btn-info" role="button">Add New Address</a>
+			<p></p>
+		</div>
+		</th:block>
+		
+		<th:block th:unless="${customer.id == null}">
+		<div><h2 style="font-size:24px">Membership</h2></div>
+		</th:block>
+		
+		<th:block th:unless="${customer.id == null}" th:each="membership, status : ${customer.memberships}">
+		<input type="hidden" name="membershipID" th:value="${membership.id}" />
+		<div class="form-group row">
+			<label class="col-form-label col-sm-9">Membership #[[${status.count}]]: </label>
+			<div class="col-sm-3">
+				<a th:href="@{'/customers/edit/' + ${customer.id} + '/delete_membership/' + ${membership.id}}" class="btn btn-danger" role="button">Delete</a>
+			</div>
+		</div>
+		
+		<div class="form-group row">
+			<label class="col-form-label col-sm-2">User ID: </label>
+			<div class="col-sm-4">
+				<input type="text" name="membershipUser_id" placeholder = "User ID/Serial Number" th:value="${membership.user_id}" class="form-control" >
+			</div>
+			<label class="col-form-label col-sm-2">User Name: </label>
+			<div class="col-sm-4">
+				<input type="text" name="membershipUsername" placeholder = "User/Account Name" th:value="${membership.username}" class="form-control" >
+			</div>
+		</div>
+		
+		<div class="form-group row">
+			<label class="col-form-label col-sm-2">Password: </label>
+			<div class="col-sm-4">
+				<input type="text" name="membershipPassword" placeholder = "User/Account Password" th:value="${membership.password}" class="form-control" >
+			</div>
+			<label class="col-form-label col-sm-2">Company: </label>
+			<div class="col-sm-4">
+				<input type="text" name="membershipCompany" placeholder = "Company/Group/Service Provider" th:value="${membership.company}" class="form-control" >
+			</div>
+		</div>
+		
+		<div class="form-group row">
+			<label class="col-form-label col-sm-2">Note: </label>
+			<div class="col-sm-4">
+				<input type="text" name="membershipNote" placeholder = "Note" th:value="${membership.note}" class="form-control" >
+			</div>
+		</div>
+		</th:block>
+		
+		<th:block th:unless="${customer.id == null}">
+		<div class="col-sm-12">
+			<a th:href="@{'/customers/edit/' + ${customer.id} + '/add_membership'}" class="btn btn-info" role="button">Add New Membership</a>
+			<p></p>
+		</div>
+		</th:block>
+		
+		<div th:if="${customer.id == null}">
+			<div class="text-center p-3">
+				<button type="submit" class="btn btn-success">Next</button>
+			</div>
+		</div>
+		
+		<div th:unless="${customer.id == null}">
+			<div class="text-center p-3">
+				<button type="submit" class="btn btn-primary">Save</button>
+			</div>
+		</div>
+		
+	</div>
+	</form>
+</div>
+
+</body>
+</html>
